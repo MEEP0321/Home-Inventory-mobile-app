@@ -2,6 +2,7 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace HomeInventory.Services
         public BaseService(DbContext dbContext)
         {
             this.dbContext = dbContext;
-            _ = Init(this.dbContext);
+            Init(this.dbContext);
+
         }
 
         public async Task Init(DbContext dbContext)
@@ -24,12 +26,13 @@ namespace HomeInventory.Services
             if (dbContext.Database is not null)
                 return;
 
-            dbContext.Database = new SQLiteAsyncConnection(Constants.DatabasePath);
+            dbContext.Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
 
-            dbContext.Database.ExecuteAsync("PRAGMA foreign_keys = ON;").Wait();
+            var migrationResult = await dbContext.Database.CreateTablesAsync(CreateFlags.None
+                , typeof(Item)
+                , typeof(Storage));
 
-            await dbContext.Database.CreateTableAsync<Item>();
-            await dbContext.Database.CreateTableAsync<Storage>();
+
         }
 
     }

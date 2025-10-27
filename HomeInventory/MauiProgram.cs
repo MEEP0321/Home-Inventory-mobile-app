@@ -1,4 +1,6 @@
 ﻿using HomeInventory.Services;
+using HomeInventory.ViewModels;
+using HomeInventory.Views;
 using Microsoft.Extensions.Logging;
 
 namespace HomeInventory
@@ -18,9 +20,27 @@ namespace HomeInventory
 
 
 
+
+            builder.Services.AddTransient<StoragesViewModel>();
+            builder.Services.AddTransient<StoragesPage>();
+            builder.Services.AddTransient<StorageEditViewModel>();
+            builder.Services.AddTransient<StorageEditPage>();
+            builder.Services.AddTransient<StorageCreateViewModel>();
+            builder.Services.AddTransient<StorageCreatePage>();
+
+            builder.Services.AddTransient<ItemsViewModel>();
+            builder.Services.AddTransient<ItemsPage>();
+            builder.Services.AddTransient<ItemEditViewModel>();
+            builder.Services.AddTransient<ItemEditPage>();
+            builder.Services.AddTransient<ItemCreateViewModel>();
+            builder.Services.AddTransient<ItemCreatePage>();
+
+            builder.Services.AddTransient<MainPageViewModel>();
+            builder.Services.AddTransient<MainPage>();
+
             builder.Services.AddSingleton<DbContext>();
-            builder.Services.AddSingleton<StorageService>();
             builder.Services.AddSingleton<ItemService>();
+            builder.Services.AddSingleton<StorageService>();
 
 
 #if DEBUG

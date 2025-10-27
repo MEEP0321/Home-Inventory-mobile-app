@@ -9,6 +9,6 @@ namespace HomeInventory.Services
 {
     public class DbContext
     {
-        public SQLiteAsyncConnection Database;
+        public SQLiteAsyncConnection Database { get; set; }
     }
 }

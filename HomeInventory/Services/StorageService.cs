@@ -9,20 +9,23 @@ namespace HomeInventory.Services
 {
     public class StorageService: BaseService
     {
-        public StorageService(DbContext dbContext, ItemService itemService) : base(dbContext)
+        public StorageService(DbContext dbContext) : base(dbContext)
         {
         }
 
-        public async Task Create(Storage storage)
+        public async Task<Storage> Create(Storage storage)
         {
             try
             {
                 await dbContext.Database.InsertAsync(storage);
+                return storage;
+
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Failed to insert data. {ex.Message}";
             }
+            return null;
 
         }
 
@@ -41,7 +44,7 @@ namespace HomeInventory.Services
 
         }
 
-        public async Task<Storage> Get(string id)
+        public async Task<Storage> Get(int id)
         {
             try
             {
@@ -56,7 +59,7 @@ namespace HomeInventory.Services
                     models.AddRange(items.Select(i => (IBaseModel)i));
                     models.AddRange(storages.Select(s => (IBaseModel)s));
 
-                    storage.parentStorage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == storage.ParentStorageId)
+                    storage.parentStorage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == storage.ParentStorageId);
 
                     storage.Items = models;
 
@@ -72,7 +75,7 @@ namespace HomeInventory.Services
             return null!;
         }
 
-        public async Task Update(string id, Storage storage)
+        public async Task Update(int id, Storage storage)
         {
             try
             {
@@ -92,7 +95,7 @@ namespace HomeInventory.Services
             }
         }
 
-        public async Task Delete(string id)
+        public async Task Delete(int id)
         {
             try
             {

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace HomeInventory.Models
 {
-    public partial class Item: ObservableObject, IBaseModel
+    public class Item: IBaseModel
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [PrimaryKey]
+        [AutoIncrement]
+        public int Id { get; set; }
         public string Name {  get; set; } = string.Empty;
         public string ImgPath { get; set; } = string.Empty;
 
@@ -17,7 +20,8 @@ namespace HomeInventory.Models
         public bool IsInStorage { get; set; }
         public string Location { get; set; } = string.Empty;
         */
-        public string StorageId { get; set; } = string.Empty;
+        public int StorageId { get; set; }
+        [Ignore]
         public Storage Storage { get; set; }
         public string Notes { get; set; } = string.Empty;
     }

@@ -15,16 +15,18 @@ namespace HomeInventory.Services
 
         }
 
-        public async Task Create(Item item)
+        public async Task<Item> Create(Item item)
         {
             try
             {
                 await dbContext.Database.InsertAsync(item);
+                return item;
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Failed to insert data. {ex.Message}";
             }
+            return null;
             
         }
 
@@ -42,8 +44,21 @@ namespace HomeInventory.Services
             return null!;
 
         }
+        public async Task<List<Storage>> GetStorages()
+        {
+            try
+            {
+                return await dbContext.Database.Table<Storage>().ToListAsync();
+            }
+            catch (Exception ex)
+            {
 
-        public async Task<Item> Get(string id)
+                StatusMessage = $"Failed to retrieve data. {ex.Message}";
+            }
+            return null!;
+        }
+
+        public async Task<Item> Get(int id)
         {
             try
             {
@@ -63,7 +78,7 @@ namespace HomeInventory.Services
             return null!;
         }
 
-        public async Task Update(string id, Item item)
+        public async Task Update(int id, Item item)
         {
             try
             {
@@ -83,7 +98,7 @@ namespace HomeInventory.Services
             }
         }
 
-        public async Task Delete(string id)
+        public async Task Delete(int id)
         {
             try
             {

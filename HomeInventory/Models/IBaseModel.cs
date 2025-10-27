@@ -8,7 +8,7 @@ namespace HomeInventory.Models
 {
     public interface IBaseModel
     {
-        public string Id {  get; set; }
+        public int Id {  get; set; }
         public string Name { get; set; }
         public string ImgPath { get; set; }
     }
