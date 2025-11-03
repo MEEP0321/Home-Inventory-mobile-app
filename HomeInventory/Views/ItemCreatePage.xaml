@@ -54,6 +54,21 @@
                         Text="{Binding Item.Name}"/>
                 </VerticalStackLayout>
 
+                <HorizontalStackLayout>
+                    <Label
+                        VerticalOptions="Center"
+                        Text="{Binding SelectedStorageText}"
+                        />
+                    <Button
+                        BackgroundColor="#EFECE3"
+                        IsVisible="{Binding IsDeleteButtonVisible}"
+                        Command="{Binding RemoveSelectionCommand}"
+                        VerticalOptions="Center"
+                        FontSize="Micro"
+                        TextColor="Black"
+                        Text="x"/>
+                </HorizontalStackLayout>
+ 
                 <VerticalStackLayout
                     >
                     <Label 
@@ -67,7 +82,7 @@
                         Placeholder="Keresés..." />
                     <ScrollView>
                         <CollectionView
-                        HeightRequest="500"
+                        MaximumHeightRequest="500"
                         SelectionMode="Single"
                         SelectedItem="{Binding SelectedStorage}"
                         SelectionChangedCommand="{Binding SelectStorageCommand}"

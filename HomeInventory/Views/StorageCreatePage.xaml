@@ -5,47 +5,128 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:StorageCreateViewModel"
-            Loaded="StorageCreatePage_OnLoaded"
-             Title="StorageCreatePage">
-    <VerticalStackLayout>
-        <Label 
-        Text="Welcome to .NET MAUI!"
-        VerticalOptions="Center" 
-        HorizontalOptions="Center" />
+             Loaded="StorageCreatePage_OnLoaded">
+    <Grid RowDefinitions="85, *">
+        <Label
+           Grid.Row="0"
+           VerticalOptions="Fill"
+           HorizontalOptions="Fill"
+           BackgroundColor="Black"
+           HorizontalTextAlignment="Center"
+           VerticalTextAlignment="Center"
+           TextColor="#EFECE3"
+           FontSize="Header"
+           Text="Tároló hozzáadása"
+           />
+        <Button 
+           Grid.Row="0"
+           HorizontalOptions="Start"
+           VerticalOptions="Fill"
+           BackgroundColor="Black"
+           MinimumWidthRequest="100"
+           FontSize="Header"
+           Text="&lt;"
+           Command="{Binding GoBackCommand}"
+           />
+        <ScrollView Grid.Row="1" BackgroundColor="#EFECE3">
+            <VerticalStackLayout
+           Padding="100"
+           Spacing="50"
+           >
+                <VerticalStackLayout>
+                    <Rectangle Fill="Blue"
+                       WidthRequest="350"
+                       HeightRequest="350"
+                       />
+                </VerticalStackLayout>
 
-        <Label Text="Tároló neve: "></Label>
-        <Entry Text="{Binding Storage.Name}"></Entry>
+                <VerticalStackLayout
+                   >
+                    <Label 
+                       TextColor="Black"
+                       Text="Tároló neve: "/>
+                    <Entry 
+                       TextColor="Black"
+                       BackgroundColor="#D9D8D2"
+                       ClearButtonVisibility="WhileEditing"
+                       Placeholder="Tároló neve"
+                       PlaceholderColor="#B5BDC6"
+                       Text="{Binding Storage.Name}"/>
+                </VerticalStackLayout>
 
-        <Label Text="Megjegyzés: "></Label>
-        <Entry Text="{Binding Storage.Notes}"></Entry>
+                <VerticalStackLayout>
+                    <Label 
+                        TextColor="Black"
+                        Text="Megjegyzés: "/>
+                    <Editor 
+                        HeightRequest="100"
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        Placeholder="Megjegyzés"
+                        PlaceholderColor="#B5BDC6"
+                        Text="{Binding Storage.Notes}"/>
+                </VerticalStackLayout>
 
-        <Grid RowDefinitions="Auto,*">
-            <Label Text="Melyik tárolóban van:"></Label>
-            <Entry 
-              Grid.Row="0"
-              Text="{Binding FilterText, Mode=TwoWay}" 
-              Placeholder="Keresés..." />
+                <HorizontalStackLayout>
+                    <Label 
+                        VerticalOptions="Center"
+                        Text="Tárolóban van-e?"/>
+                    <CheckBox IsChecked="{Binding IsStorageSelectionVisible}"/>
+                </HorizontalStackLayout>
 
-            <CollectionView
-              Grid.Row="1"
-              SelectionMode="Single"
-              SelectedItem="{Binding SelectedStorage}"
-              SelectionChangedCommand="{Binding SelectStorageCommand}"
-              ItemsSource="{Binding FilteredBaseModels}">
+                <VerticalStackLayout
+                    IsVisible="{Binding IsStorageSelectionVisible}"
+                   >
+                    <Label 
+                       TextColor="Black"
+                       Text="Melyik tárolóban van:"/>
+                    <Entry 
+                       TextColor="Black"
+                       BackgroundColor="#D9D8D2"
+                       ClearButtonVisibility="WhileEditing"
+                       Text="{Binding FilterText, Mode=TwoWay}" 
+                       Placeholder="Keresés..." />
+                    <ScrollView>
+                        <CollectionView
+                       MaximumHeightRequest="500"
+                       SelectionMode="Single"
+                       SelectedItem="{Binding SelectedStorage}"
+                       SelectionChangedCommand="{Binding SelectStorageCommand}"
+                       ItemsSource="{Binding FilteredBaseModels}">
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Storage">
-                        <Grid Padding="10">
-                            <Label Text="{Binding Name}" FontSize="18"/>
-                            <Label Text="{Binding Location}" FontSize="18"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
 
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Storage">
+                                    <HorizontalStackLayout>
+                                        <Rectangle Fill="Blue"
+                                      WidthRequest="150"
+                                      HeightRequest="150"
+                                       />
+                                        <VerticalStackLayout>
+                                            <Label
+                                           FontSize="Title"
+                                           TextColor="Black"
+                                           Text="{Binding Name}"
+                                           />
+                                            <Label
+                                           TextColor="Black"
+                                           Text="{Binding Location}"
+                                           />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
 
-        <Button Text="Létrehoz" Command="{Binding CreateStorageCommand}"/>
-        <Button Text="Back" Command="{Binding GoBackCommand}"/>
-    </VerticalStackLayout>
+                <Button 
+                   BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                   FontSize="Medium"
+                   TextColor="Black"
+                   Text="Létrehoz" 
+                   Command="{Binding CreateStorageCommand}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

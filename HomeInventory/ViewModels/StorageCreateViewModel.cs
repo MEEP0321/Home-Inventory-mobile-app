@@ -26,7 +26,11 @@ namespace HomeInventory.ViewModels
             Storages.Clear();
             storageList.ForEach(s => Storages.Add(s));
             FilterText = string.Empty;
+            IsStorageSelectionVisible = false;
         }
+
+        [ObservableProperty]
+        bool isStorageSelectionVisible;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(FilteredBaseModels))]

@@ -31,6 +31,8 @@ namespace HomeInventory.ViewModels
             Storages.Clear();
             storageList.ForEach(s => Storages.Add(s));
             FilterText = string.Empty;
+            SelectedStorageText = "A kiválasztott tároló: nincs";
+            IsDeleteButtonVisible = false;
         }
 
         //Keresésért felel
@@ -46,14 +48,31 @@ namespace HomeInventory.ViewModels
         [ObservableProperty]
         Storage selectedStorage;
 
+        [ObservableProperty]
+        string selectedStorageText = "init";
+
+        [ObservableProperty]
+        bool isDeleteButtonVisible;
+
         [RelayCommand]
         public void SelectStorage()
         {
             if (selectedStorage is not null)
             {
                 FilterText = selectedStorage.Name;
+                IsDeleteButtonVisible = true;
+                SelectedStorageText = $"A kiválasztott tároló: {selectedStorage.Name}";
                 item.ParenId = selectedStorage.Id;
             }
+        }
+
+        [RelayCommand]
+        public void RemoveSelection()
+        {
+            FilterText = string.Empty;
+            IsDeleteButtonVisible = false;
+            SelectedStorageText = $"A kiválasztott tároló: nincs";
+            item.ParenId = -1;
         }
 
 
