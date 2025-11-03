@@ -10,9 +10,13 @@
             Grid.Row="0"
             Grid.ColumnSpan="2"
             FontSize="Header"
+            BackgroundColor="Black"
+            TextColor="#EFECE3"
             Text="Home"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
             />
         <VerticalStackLayout
             Grid.Row="1"
@@ -27,6 +31,7 @@
                 HeightRequest="250"
                 WidthRequest="500"
                 FontSize="Large"
+                TextColor="Black"
                 Text="Tároló hozzáadása" 
                 Command="{Binding GoToStorageCreatePageCommand}"/>
             <Button 
@@ -34,6 +39,7 @@
                 HeightRequest="250"
                 WidthRequest="500" 
                 FontSize="Large"
+                TextColor="Black"
                 Text="Tárgy hozzáadása" 
                 Command="{Binding GoToItemCreatePageCommand}"/>
         </VerticalStackLayout>
@@ -46,6 +52,7 @@
             CornerRadius="0"
             HorizontalOptions="Fill"
             FontSize="Medium"
+            TextColor="Black"
             Text="Tárolók" 
             Command="{Binding GoToStoragesPageCommand}" />
 
@@ -58,6 +65,7 @@
             CornerRadius="0"
             HorizontalOptions="Fill"
             FontSize="Medium"
+            TextColor="Black"
             Text="Tárgyak" 
             Command="{Binding GoToItemsPageCommand}" />
     </Grid>
