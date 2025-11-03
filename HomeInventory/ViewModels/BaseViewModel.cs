@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using HomeInventory.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace HomeInventory.ViewModels
 {
     public partial class BaseViewModel : ObservableObject
     {
-        public BaseViewModel()
+        protected DbService service;
+        public BaseViewModel(DbService service)
         {
-
+            this.service = service;
         }
 
         [ObservableProperty]

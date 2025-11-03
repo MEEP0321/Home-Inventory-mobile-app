@@ -4,9 +4,17 @@ namespace HomeInventory.Views;
 
 public partial class StorageEditPage : ContentPage
 {
-	public StorageEditPage(StorageEditViewModel vm)
+    StorageEditViewModel vm;
+
+    public StorageEditPage(StorageEditViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;
+        this.vm = vm;
 	}
+
+    private async void StorageEditPage_OnLoaded(object? sender, EventArgs e)
+    {
+        vm.InitializeAsync();
+    }
 }

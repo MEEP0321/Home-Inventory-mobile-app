@@ -5,18 +5,60 @@
              x:DataType="viewmodel:MainPageViewModel"
              x:Class="HomeInventory.MainPage">
 
-    <ScrollView>
+    <Grid RowDefinitions="85, *, 75" ColumnDefinitions="*, *">
+        <Label
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            FontSize="Header"
+            Text="Home"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            />
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25"
-            BackgroundColor="White">
-            
-            <Label Text="hello" TextColor="Black"/>
-            <Button Text="Create Storage" Command="{Binding GoToStorageCreatePageCommand}"/>
-            <Button Text="Create Item" Command="{Binding GoToItemCreatePageCommand}"/>
-            <Button Text="Items" Command="{Binding GoToItemsPageCommand}"/>
-            <Button Text="Storages" Command="{Binding GoToStoragesPageCommand}"/>
-        </VerticalStackLayout>
-    </ScrollView>
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Padding="50"
+            Spacing="30"
+            BackgroundColor= "#EFECE3"
+            >
 
+            <Button 
+                BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="5"
+                HeightRequest="250"
+                WidthRequest="500"
+                FontSize="Large"
+                Text="Tároló hozzáadása" 
+                Command="{Binding GoToStorageCreatePageCommand}"/>
+            <Button 
+                BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="5"
+                HeightRequest="250"
+                WidthRequest="500" 
+                FontSize="Large"
+                Text="Tárgy hozzáadása" 
+                Command="{Binding GoToItemCreatePageCommand}"/>
+        </VerticalStackLayout>
+        <Button 
+            Grid.Row="2"
+            Grid.Column="0"
+            BackgroundColor="#4A70A9"
+            BorderColor="#8FABD4"
+            BorderWidth="1"
+            CornerRadius="0"
+            HorizontalOptions="Fill"
+            FontSize="Medium"
+            Text="Tárolók" 
+            Command="{Binding GoToStoragesPageCommand}" />
+
+        <Button 
+            Grid.Row="2"
+            Grid.Column="1"
+            BackgroundColor="#4A70A9"
+            BorderColor="#8FABD4"
+            BorderWidth="1"
+            CornerRadius="0"
+            HorizontalOptions="Fill"
+            FontSize="Medium"
+            Text="Tárgyak" 
+            Command="{Binding GoToItemsPageCommand}" />
+    </Grid>
 </ContentPage>

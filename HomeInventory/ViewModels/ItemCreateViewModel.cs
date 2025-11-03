@@ -2,52 +2,73 @@
 using CommunityToolkit.Mvvm.Input;
 using HomeInventory.Models;
 using HomeInventory.Services;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Dispatching;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeInventory.ViewModels
 {
-    public partial class ItemCreateViewModel : BaseViewModel
+    public partial class ItemCreateViewModel: BaseViewModel
     {
-        ItemService service;
-        public ItemCreateViewModel(ItemService service)
+        public ItemCreateViewModel(DbService service): base(service)
         {
-            this.service = service; 
             item = new Item();
-            storages = new List<Storage>();
+            item.Type = "Item";
+            selectedStorage = new Storage();
+            Storages = new ObservableCollection<Storage>();
             
         }
 
         public async Task InitializeAsync()
         {
-            var storageList = await service.GetStorages();
+            var storageList = await service.GetAllStorages();
             Storages.Clear();
             storageList.ForEach(s => Storages.Add(s));
+            FilterText = string.Empty;
         }
+
+        //Keresésért felel
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FilteredBaseModels))]
+        string filterText = "init";
+
+        //Betölti az összes basemodelt, itt csak S
+        ObservableCollection<Storage> Storages;
+
+        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.Contains(FilterText)).ToList();
+
+        [ObservableProperty]
+        Storage selectedStorage;
+
+        [RelayCommand]
+        public void SelectStorage()
+        {
+            if (selectedStorage is not null)
+            {
+                FilterText = selectedStorage.Name;
+                item.ParenId = selectedStorage.Id;
+            }
+        }
+
 
         [ObservableProperty]
         Item item;
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(FilteredStorages))]
-        string filterText = string.Empty;
-
-        [ObservableProperty]
-        List<Storage> storages;
-        public List<Storage> FilteredStorages => FilterText.Length == 0 ? Storages : Storages.Where(w => w.Name.Contains(FilterText)).ToList();
-
         [RelayCommand]
         public async Task CreateItem()
         {
-            var result = await service.Create(item);
+            var result = await service.CreateItem(item);
 
             if (result is not null)
             {
                 await Shell.Current.DisplayAlert("Siker", "Jó", "OK");
+                GoBack();
             }
             else
             {
@@ -59,6 +80,11 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task GoBack()
         {
+            while (Shell.Current.Navigation.NavigationStack.Count > 1)
+            {
+                Shell.Current.Navigation.RemovePage(Shell.Current.Navigation.NavigationStack[1]);
+            }
+
             await Shell.Current.GoToAsync($"..", true);
         }
     }

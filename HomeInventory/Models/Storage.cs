@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +8,15 @@ using System.Threading.Tasks;
 
 namespace HomeInventory.Models
 {
-    public class Storage: IBaseModel
+    public partial class Storage: BaseModel
     {
-        [PrimaryKey]
-        [AutoIncrement]
-        public int Id {  get; set; }
 
-        public int ParentStorageId { get; set; }
-        [Ignore]
-        public Storage parentStorage { get; set; }
+        [ObservableProperty]
+        [property:Ignore]
+        Storage parentStorage;
 
-        public string Name { get; set; } = string.Empty;
-        public string ImgPath { get; set; } = string.Empty;
-
-        [Ignore]
-        public List<IBaseModel> Items { get; set; }
-        public string Notes { get; set; } = string.Empty;
-
-
+        [ObservableProperty]
+        [property: Ignore]
+        List<BaseModel> items;
     }
 }

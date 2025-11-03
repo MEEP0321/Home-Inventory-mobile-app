@@ -5,6 +5,7 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:StorageCreateViewModel"
+            Loaded="StorageCreatePage_OnLoaded"
              Title="StorageCreatePage">
     <VerticalStackLayout>
         <Label 
@@ -17,6 +18,31 @@
 
         <Label Text="Megjegyzés: "></Label>
         <Entry Text="{Binding Storage.Notes}"></Entry>
+
+        <Grid RowDefinitions="Auto,*">
+            <Label Text="Melyik tárolóban van:"></Label>
+            <Entry 
+              Grid.Row="0"
+              Text="{Binding FilterText, Mode=TwoWay}" 
+              Placeholder="Keresés..." />
+
+            <CollectionView
+              Grid.Row="1"
+              SelectionMode="Single"
+              SelectedItem="{Binding SelectedStorage}"
+              SelectionChangedCommand="{Binding SelectStorageCommand}"
+              ItemsSource="{Binding FilteredBaseModels}">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Storage">
+                        <Grid Padding="10">
+                            <Label Text="{Binding Name}" FontSize="18"/>
+                            <Label Text="{Binding Location}" FontSize="18"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
 
 
         <Button Text="Létrehoz" Command="{Binding CreateStorageCommand}"/>

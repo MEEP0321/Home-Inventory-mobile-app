@@ -2,11 +2,38 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HomeInventory.Views.StoragesPage"
+             xmlns:model="clr-namespace:HomeInventory.Models"
+             xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
+             x:DataType="viewmodel:StoragesViewModel"
+             Loaded="StoragesPage_OnLoaded"
              Title="StoragesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout>
+                <Grid RowDefinitions="Auto, Auto, *"  WidthRequest="300" RowSpacing="10" Padding="0,10">
+                    <CollectionView ItemsSource="{Binding Storages}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Storage">
+                                <Frame>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoragesViewModel}}, Path=OpenStorageDetailPageCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
+
+                                    <VerticalStackLayout>
+                                        <Label FontSize="Medium" FontAttributes="Bold" Text="{Binding Name}" />
+                                        <Label FontSize="Small" Text="{Binding Location}" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </Grid>
+
+
+
+                <Button Text="Back" Command="{Binding GoBackCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

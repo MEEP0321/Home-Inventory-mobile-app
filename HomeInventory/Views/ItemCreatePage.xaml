@@ -5,39 +5,108 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:ItemCreateViewModel"
-             Loaded="ItemCreatePage_OnLoaded"
-             Title="Tárgy Hozzáadása">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Loaded="ItemCreatePage_OnLoaded">
+    <Grid RowDefinitions="85, *">
 
-        <Label Text="Tárgy neve: "></Label>
-        <Entry Text="{Binding Item.Name}"></Entry>
+        <Button 
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            Background="#B5BDC6"
+            Text="Vissza" 
+            Command="{Binding GoBackCommand}"
+            />
+        <Label
+            Grid.Row="0"
+            FontSize="Header"
+            Text="Tárgy hozzáadása"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            />
+        <ScrollView Grid.Row="1" BackgroundColor="#EFECE3">
+            <VerticalStackLayout
+            Padding="100"
+            Spacing="50"
+            >
+                <VerticalStackLayout
+                    >
+                    <Label 
+                        TextColor="Black"
+                        Text="Tárgy neve: "/>
+                    <Entry 
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        ClearButtonVisibility="WhileEditing"
+                        Placeholder="Tárgy neve"
+                        PlaceholderColor="#B5BDC6"
+                        Text="{Binding Item.Name}"/>
+                </VerticalStackLayout>
 
-        <Label Text="Megjegyzés: "></Label>
-        <Entry Text="{Binding Item.Notes}"></Entry>
-
-        <Grid RowDefinitions="Auto,*">
-            <Entry Text="{Binding FilterText, Mode=TwoWay}"/>
-            <ListView Grid.Row="1"
-              ItemsSource="{Binding FilteredStorages}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Storage">
-                        <ViewCell>
-                            <Label Text="{Binding Name}"/>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
-
-
-        <Button Text="Létrehoz" Command="{Binding CreateItemCommand}"/>
-        <Button Text="Back" Command="{Binding GoBackCommand}"/>
+                <VerticalStackLayout
+                    >
+                    <Label 
+                        TextColor="Black"
+                        Text="Melyik tárolóban van:"/>
+                    <Entry 
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        ClearButtonVisibility="WhileEditing"
+                        Text="{Binding FilterText, Mode=TwoWay}" 
+                        Placeholder="Keresés..." />
+                    <ScrollView>
+                        <CollectionView
+                        HeightRequest="500"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedStorage}"
+                        SelectionChangedCommand="{Binding SelectStorageCommand}"
+                        ItemsSource="{Binding FilteredBaseModels}">
 
 
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Storage">
+                                    <HorizontalStackLayout>
+                                        <Rectangle Fill="Blue"
+                                       WidthRequest="150"
+                                       HeightRequest="150"
+                                        />
+                                        <VerticalStackLayout>
+                                            <Label
+                                            FontSize="Title"
+                                            TextColor="Black"
+                                            Text="{Binding Name}"
+                                            />
+                                            <Label
+                                            TextColor="Black"
+                                            Text="{Binding Location}"
+                                            />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
 
-    </VerticalStackLayout>
+                <VerticalStackLayout>
+                    <Label 
+                        TextColor="Black"
+                        Text="Megjegyzés: "/>
+                    <Editor 
+                        HeightRequest="100"
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        Placeholder="Megjegyzés"
+                        PlaceholderColor="#B5BDC6"
+                        Text="{Binding Item.Notes}"/>
+                </VerticalStackLayout>
+
+
+                <Button 
+                    BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                    FontSize="Medium"
+                    Text="Létrehoz" 
+                    Command="{Binding CreateItemCommand}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

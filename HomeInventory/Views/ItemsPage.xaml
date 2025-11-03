@@ -2,14 +2,36 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HomeInventory.Views.ItemsPage"
+             xmlns:model="clr-namespace:HomeInventory.Models"
+             xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
+             x:DataType="viewmodel:ItemsViewModel"
+             Loaded="ItemsPage_OnLoaded"
              Title="ItemsPage">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Grid RowDefinitions="Auto, Auto, *"  WidthRequest="300" RowSpacing="10" Padding="0,10">
+            <CollectionView ItemsSource="{Binding Items}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Item">
+                        <Frame>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ItemsViewModel}}, Path=OpenItemDetailPageCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
 
-        <Button Text="Edit test" Command="{Binding GoToItemEditPageCommand}"/>
+                            <VerticalStackLayout>
+                                <Label FontSize="Medium" FontAttributes="Bold" Text="{Binding Name}" />
+                                <Label FontSize="Small" Text="{Binding Notes}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Grid>
+
+
+
         <Button Text="Back" Command="{Binding GoBackCommand}"/>
     </VerticalStackLayout>
 </ContentPage>

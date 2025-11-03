@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HomeInventory.Views.ItemDetailsPage"
+             xmlns:model="clr-namespace:HomeInventory.Models"
+             xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
+             x:DataType="viewmodel:ItemDetailsViewModel"
+             Loaded="ItemDetailsPage_OnLoaded"
+             Title="ItemDetailsPage">
+    <VerticalStackLayout>
+        <Label Text="details page"/>
+        <Label Text="{Binding Item.Name}"/>
+        <Label Text="{Binding Item.Notes}"/>
+        <Label Text="{Binding Item.Storage.Name}"/>
+
+        <Button Text="edit" Command="{Binding OpenItemEditPageCommand}"/>
+        <Button Text="delete" Command="{Binding DeleteCommand}"/>
+        <Button Text="back" Command="{Binding GoBackCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

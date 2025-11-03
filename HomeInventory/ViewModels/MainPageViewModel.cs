@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HomeInventory.ViewModels
 {
-    public partial class MainPageViewModel: BaseViewModel
+    public partial class MainPageViewModel
     {
 
         [RelayCommand]

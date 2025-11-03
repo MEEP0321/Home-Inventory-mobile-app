@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HomeInventory.Views.StorageDetailsPage"
+             xmlns:model="clr-namespace:HomeInventory.Models"
+             xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
+             x:DataType="viewmodel:StorageDetailsViewModel"
+             Loaded="StorageDetailsPage_OnLoaded"
+             Title="StorageDetailsPage">
+    <VerticalStackLayout>
+        <Label Text="details page"/>
+        <Label Text="{Binding Storage.Name}"/>
+        <Label Text="{Binding Storage.Location}"/>
+
+        <ListView
+        ItemsSource="{Binding Storage.Items}"
+        SeparatorVisibility="Default">
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:BaseModel">
+                    <ViewCell>
+                        <VerticalStackLayout Padding="10">
+                            <Label 
+                            Text="{Binding Name}" 
+                            FontSize="18"
+                            FontAttributes="Bold" />
+                            <Label 
+                            Text="{Binding Notes}" 
+                            FontSize="14"
+                            TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Text="Tárgy hozzáadása"/>
+        <Button Text="edit" Command="{Binding OpenItemEditPageCommand}"/>
+        <Button Text="delete" Command="{Binding DeleteCommand}"/>
+        <Button Text="back" Command="{Binding GoBackCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>
