@@ -16,7 +16,7 @@ namespace HomeInventory.ViewModels
         public StorageCreateViewModel(DbService service) : base(service) 
         {
             storage = new Storage();
-            storage.Type = "Storage";
+            storage.Type = "Tároló";
             Storages = new ObservableCollection<Storage>();
         }
 
@@ -27,6 +27,7 @@ namespace HomeInventory.ViewModels
             storageList.ForEach(s => Storages.Add(s));
             FilterText = string.Empty;
             IsStorageSelectionVisible = false;
+            IsSelectedStorageVisible = false;
         }
 
         [ObservableProperty]
@@ -39,10 +40,13 @@ namespace HomeInventory.ViewModels
         //Betölti az összes basemodelt, itt csak 
         ObservableCollection<Storage> Storages;
 
-        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.Contains(FilterText)).ToList();
+        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.ToLower().Contains(FilterText.ToLower())).ToList();
 
         [ObservableProperty]
         Storage selectedStorage;
+
+        [ObservableProperty]
+        bool isSelectedStorageVisible;
 
         [RelayCommand]
         public void SelectStorage()
@@ -50,6 +54,7 @@ namespace HomeInventory.ViewModels
             if (selectedStorage is not null)
             {
                 FilterText = selectedStorage.Name;
+                IsSelectedStorageVisible = true;
                 storage.ParenId = selectedStorage.Id;
             }
         }
@@ -65,11 +70,28 @@ namespace HomeInventory.ViewModels
 
             if (result is not null)
             {
-                await Shell.Current.DisplayAlert("Siker", "Jó", "OK");
+                GoBack();
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
+            }
+        }
+
+
+        [RelayCommand]
+        public void RemoveSelection()
+        {
+            FilterText = string.Empty;
+            IsSelectedStorageVisible = false;
+            storage.ParenId = -1;
+        }
+
+        partial void OnIsStorageSelectionVisibleChanging(bool value)
+        {
+            if (!IsStorageSelectionVisible)
+            {
+                RemoveSelection();
             }
         }
 

@@ -56,7 +56,16 @@ namespace HomeInventory.Services
         {
             try
             {
-                return await dbContext.Database.Table<Item>().ToListAsync();
+                var itemList = await dbContext.Database.Table<Item>().ToListAsync();
+                foreach (var item in itemList)
+                {
+                    if (item.ParenId != -1)
+                    {
+                        Storage storage = await GetStorage(item.ParenId);
+                        item.Location = await GetLocation(storage);
+                    }
+                }
+                return itemList;
             }
             catch (Exception ex)
             {
@@ -73,9 +82,13 @@ namespace HomeInventory.Services
             {
                 Item item = await dbContext.Database.Table<Item>().FirstOrDefaultAsync(x => x.Id == id);
 
-                if (item is not null && item.ParenId != -1)
+                if (item is not null)
                 {
-                    item.Storage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == item.ParenId);
+                    if (item.ParenId != -1)
+                    {
+                        item.Storage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == item.ParenId);
+                        item.Location = await GetLocation(item.Storage);
+                    }
                     return item;
                 }
             }
@@ -140,7 +153,7 @@ namespace HomeInventory.Services
                 var storageList = await dbContext.Database.Table<Storage>().ToListAsync();
 
                 foreach (var storage in storageList) {
-                    storage.Location = await GetLocation(storage.Id);
+                    storage.Location = await GetLocation(storage);
                 }
                 return storageList;
             }
@@ -167,10 +180,17 @@ namespace HomeInventory.Services
 
                     models.AddRange(items.Select(i => (BaseModel)i));
                     models.AddRange(storages.Select(s => (BaseModel)s));
+                    models = models.OrderByDescending(i => i.Type).ToList();
 
-                    storage.ParentStorage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == storage.ParenId);
+                    if (storage.ParenId != -1)
+                    {
+                        storage.ParentStorage = await dbContext.Database.Table<Storage>().FirstOrDefaultAsync(s => s.Id == storage.ParenId);
+
+                    }
 
                     storage.Items = models;
+
+                    storage.Location = await GetLocation(storage);
 
                     return storage;
 
@@ -210,13 +230,19 @@ namespace HomeInventory.Services
                     List<Item> items = await dbContext.Database.Table<Item>().Where(i => i.ParenId == id).ToListAsync();
                     List<Storage> storages = await dbContext.Database.Table<Storage>().Where(s => s.ParenId == id).ToListAsync();
 
-                    models.AddRange(items.Select(i => (BaseModel)i));
-                    models.AddRange(storages.Select(s => (BaseModel)s));
-
-                    foreach (BaseModel model in models)
+                    foreach (Storage storage in storages) 
                     {
-                        model.ParenId = -1;
+                        storage.ParenId = -1;
+                        UpdateStorage(storage);
                     }
+
+                    foreach (Item item in items) 
+                    { 
+                        item.ParenId = -1;
+                        UpdateItem(item);
+                    }
+
+      
                 }
 
                 await dbContext.Database.DeleteAsync(storageToDelete);
@@ -229,9 +255,8 @@ namespace HomeInventory.Services
         }
 
         //Others
-        public async Task<string> GetLocation(int storageId)
+        public async Task<string> GetLocation(Storage storage)
         {
-            Storage storage = await GetStorage(storageId);
             string location = storage.Name;
             
             while (storage is not null && storage.ParenId != -1) 

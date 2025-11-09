@@ -25,11 +25,17 @@ namespace HomeInventory.ViewModels
             var itemList = await service.GetAllItems();
             Items.Clear();
             itemList.ForEach(i => Items.Add(i));
+            FilterText = string.Empty;
         }
 
         public ObservableCollection<Item> Items { get; set; }
 
+        //Keresésért felel
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FilteredBaseModels))]
+        string filterText = "init";
 
+        public List<Item> FilteredBaseModels => FilterText.Length == 0 ? Items.ToList() : Items.Where(w => w.Name.ToLower().Contains(FilterText.ToLower())).ToList();
 
         //Navigáció
         [RelayCommand]
@@ -39,7 +45,8 @@ namespace HomeInventory.ViewModels
             {
                 var param = new ShellNavigationQueryParameters
                 {
-                    { "itemId", item.Id}
+                    { "itemId", item.Id},
+                    { "sourcePage", "View"}
                 };
 
                 await Shell.Current.GoToAsync($"{nameof(ItemDetailsPage)}", param);

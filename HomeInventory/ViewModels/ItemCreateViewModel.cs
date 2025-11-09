@@ -19,7 +19,7 @@ namespace HomeInventory.ViewModels
         public ItemCreateViewModel(DbService service): base(service)
         {
             item = new Item();
-            item.Type = "Item";
+            item.Type = "Tárgy";
             selectedStorage = new Storage();
             Storages = new ObservableCollection<Storage>();
             
@@ -31,8 +31,7 @@ namespace HomeInventory.ViewModels
             Storages.Clear();
             storageList.ForEach(s => Storages.Add(s));
             FilterText = string.Empty;
-            SelectedStorageText = "A kiválasztott tároló: nincs";
-            IsDeleteButtonVisible = false;
+            IsSelectedStorageVisible = false;
         }
 
         //Keresésért felel
@@ -43,26 +42,22 @@ namespace HomeInventory.ViewModels
         //Betölti az összes basemodelt, itt csak S
         ObservableCollection<Storage> Storages;
 
-        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.Contains(FilterText)).ToList();
+        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.ToLower().Contains(FilterText.ToLower())).ToList();
 
         [ObservableProperty]
         Storage selectedStorage;
 
         [ObservableProperty]
-        string selectedStorageText = "init";
-
-        [ObservableProperty]
-        bool isDeleteButtonVisible;
+        bool isSelectedStorageVisible;
 
         [RelayCommand]
         public void SelectStorage()
         {
-            if (selectedStorage is not null)
+            if (SelectedStorage is not null)
             {
-                FilterText = selectedStorage.Name;
-                IsDeleteButtonVisible = true;
-                SelectedStorageText = $"A kiválasztott tároló: {selectedStorage.Name}";
-                item.ParenId = selectedStorage.Id;
+                FilterText = SelectedStorage.Name;
+                IsSelectedStorageVisible = true;
+                Item.ParenId = SelectedStorage.Id;
             }
         }
 
@@ -70,8 +65,7 @@ namespace HomeInventory.ViewModels
         public void RemoveSelection()
         {
             FilterText = string.Empty;
-            IsDeleteButtonVisible = false;
-            SelectedStorageText = $"A kiválasztott tároló: nincs";
+            IsSelectedStorageVisible = false;
             item.ParenId = -1;
         }
 
@@ -86,7 +80,6 @@ namespace HomeInventory.ViewModels
 
             if (result is not null)
             {
-                await Shell.Current.DisplayAlert("Siker", "Jó", "OK");
                 GoBack();
             }
             else

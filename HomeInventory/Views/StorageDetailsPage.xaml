@@ -5,38 +5,149 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:StorageDetailsViewModel"
-             Loaded="StorageDetailsPage_OnLoaded"
-             Title="StorageDetailsPage">
-    <VerticalStackLayout>
-        <Label Text="details page"/>
-        <Label Text="{Binding Storage.Name}"/>
-        <Label Text="{Binding Storage.Location}"/>
+             Loaded="StorageDetailsPage_OnLoaded">
+    <Grid RowDefinitions="85, auto, *">
+        <Label
+            Grid.Row="0"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
+            BackgroundColor="Black"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            TextColor="#EFECE3"
+            FontSize="Header"
+            Text="Tároló"     
+            />
+        <Button 
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Fill"
+            BackgroundColor="Black"
+            MinimumWidthRequest="100"
+            FontSize="Header"
+            TextColor="#EFECE3"
+            Text="&lt;"
+            Command="{Binding GoBackCommand}"
+            />
+        <Grid
+            Grid.Row="1"
+            RowDefinitions="auto"
+            ColumnDefinitions="*, *"
+            BackgroundColor="#EFECE3"
+            Padding="20"
+            >
+            <Button Grid.Column="0" 
+                 HorizontalOptions="Center" VerticalOptions="Center" 
+                 WidthRequest="150"
+                 BackgroundColor="#B5BDC6" BorderColor="Gray" BorderWidth="2"
+                 Text="Szerkeztés" Command="{Binding OpenStorageEditPageCommand}"/>
+            <Button Grid.Column="1" 
+                 HorizontalOptions="Center" VerticalOptions="Center" 
+                 WidthRequest="150"
+                 BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
+                 Text="Törlés" Command="{Binding DeleteCommand}"/>
+        </Grid>
+        <ScrollView Grid.Row="2" BackgroundColor="#EFECE3">
+            <VerticalStackLayout
+                Padding="25"
+                Spacing="30"
+                >
+                <VerticalStackLayout>
+                    <Rectangle Fill="Blue"
+                        WidthRequest="350"
+                        HeightRequest="350"
+                        />
+                </VerticalStackLayout>
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Név:"/>
+                        <Label TextColor="Black" Text="{Binding Storage.Name}"/>
+                    </VerticalStackLayout>
+                </Border>
 
-        <ListView
-        ItemsSource="{Binding Storage.Items}"
-        SeparatorVisibility="Default">
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Tárolója:"/>
+                        <Label TextColor="Black" Text="{Binding Storage.ParentStorage.Name}"/>
+                    </VerticalStackLayout>
+                </Border>
 
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:BaseModel">
-                    <ViewCell>
-                        <VerticalStackLayout Padding="10">
-                            <Label 
-                            Text="{Binding Name}" 
-                            FontSize="18"
-                            FontAttributes="Bold" />
-                            <Label 
-                            Text="{Binding Notes}" 
-                            FontSize="14"
-                            TextColor="Gray" />
-                        </VerticalStackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Lokáció:"/>
+                        <Label LineBreakMode="WordWrap" TextColor="Black" Text="{Binding Storage.Location}"/>
+                    </VerticalStackLayout>
+                </Border>
 
-        <Button Text="Tárgy hozzáadása"/>
-        <Button Text="edit" Command="{Binding OpenItemEditPageCommand}"/>
-        <Button Text="delete" Command="{Binding DeleteCommand}"/>
-        <Button Text="back" Command="{Binding GoBackCommand}"/>
-    </VerticalStackLayout>
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Megjegyzés:"/>
+                        <Label LineBreakMode="WordWrap" TextColor="Black" Text="{Binding Storage.Notes}"/>
+                    </VerticalStackLayout>
+                </Border>
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="10"
+                    Margin="0,5">
+                    <VerticalStackLayout>
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Tárolóban lévő dolgok:"/>
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding Storage.Items}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:BaseModel">
+                                    <Frame BackgroundColor="#EFECE3" BorderColor="#4A70A9">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StorageDetailsViewModel}}, Path=OpenBaseModelCommand}"
+                                        CommandParameter="{Binding .}" />
+                                        </Frame.GestureRecognizers>
+
+                                        <HorizontalStackLayout Spacing="10">
+                                            <Rectangle Fill="Blue"
+                                                WidthRequest="100"
+                                                HeightRequest="100"
+                                                />
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    FontSize="16"
+                                                    TextColor="Black"
+                                                    Text="{Binding Name}"
+                                                    />
+                                                <Label
+                                                    FontSize="10"
+                                                    TextColor="Black"
+                                                    Text="{Binding Type}"
+                                                    />
+                                            </VerticalStackLayout>
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

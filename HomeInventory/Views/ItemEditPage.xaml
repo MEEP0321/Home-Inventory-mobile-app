@@ -5,12 +5,155 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:ItemEditViewModel"
-             Loaded="ItemEditPage_OnLoaded"
-             Title="ItemEditPage">
-    <VerticalStackLayout>
-        <Entry Text="{Binding EditItem.Name}"/>
-        <Entry Text="{Binding EditItem.Notes}"/>
-        <Button Text="Save" Command="{Binding EditCommand}"/>
-        <Button Text="Back" Command="{Binding GoBackCommand}"/>
-    </VerticalStackLayout>
+             Loaded="ItemEditPage_OnLoaded">
+    <Grid RowDefinitions="85, *">
+        <Label
+            Grid.Row="0"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
+            BackgroundColor="Black"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            TextColor="#EFECE3"
+            FontSize="Header"
+            Text="Tárgy szerkesztése"
+            />
+        <Button 
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Fill"
+            BackgroundColor="Black"
+            MinimumWidthRequest="100"
+            FontSize="Header"
+            TextColor="#EFECE3"
+            Text="&lt;"
+            Command="{Binding GoBackCommand}"
+            />
+        <ScrollView Grid.Row="1" BackgroundColor="#EFECE3">
+            <VerticalStackLayout
+                Padding="25"
+                Spacing="50"
+                >
+                <VerticalStackLayout>
+                    <Rectangle Fill="Blue"
+                      WidthRequest="350"
+                      HeightRequest="350"
+                      />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label 
+                        TextColor="Black"
+                        Text="Tárgy neve: "/>
+                    <Entry 
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        ClearButtonVisibility="WhileEditing"
+                        Placeholder="Tárgy neve"
+                        PlaceholderColor="#B5BDC6"
+                        Text="{Binding EditItem.Name}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label 
+                        TextColor="Black"
+                        Text="Megjegyzés: "/>
+                    <Editor 
+                        HeightRequest="100"
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        Placeholder="Megjegyzés"
+                        PlaceholderColor="#B5BDC6"
+                        Text="{Binding EditItem.Notes}"/>
+                </VerticalStackLayout>
+
+                <Button
+                    BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="2"
+                    TextColor="Black"
+                    Text="Tároló szerkesztése"
+                    IsVisible="{Binding IsStorageSelectionNotVisible}"
+                    Command="{Binding StorageEditCommand}"
+                    />
+
+                <VerticalStackLayout 
+                    IsVisible="{Binding IsStorageSelectionVisible}"
+                    Spacing="20">
+                    
+                    <VerticalStackLayout>
+                        <Label
+                            VerticalOptions="Center"
+                            TextColor="Black"
+                            Text="A kiválasztott tároló"
+                            />
+                        <HorizontalStackLayout
+                            Spacing="10"
+                            >
+                            <Label
+                                VerticalOptions="Center"
+                                TextColor="Black"
+                                Text="{Binding SelectedStorageText}"
+                                />
+                            <Button
+                                IsVisible="{Binding IsDeleteButtonVisible}"
+                                Command="{Binding RemoveSelectionCommand}"
+                                BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="1"
+                                VerticalOptions="Center"
+                                FontSize="Micro"
+                                TextColor="Black"
+                                Text="x"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Label 
+                        TextColor="Black"
+                        Text="Melyik tárolóban van:"/>
+                    <Entry 
+                        TextColor="Black"
+                        BackgroundColor="#D9D8D2"
+                        ClearButtonVisibility="WhileEditing"
+                        Text="{Binding FilterText, Mode=TwoWay}" 
+                        Placeholder="Keresés..." />
+                    <ScrollView>
+                        <CollectionView
+                            MaximumHeightRequest="500"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedStorage}"
+                            SelectionChangedCommand="{Binding SelectStorageCommand}"
+                            ItemsSource="{Binding FilteredBaseModels}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Storage">
+                                    <HorizontalStackLayout>
+                                        <Rectangle Fill="Blue"
+                                            WidthRequest="100"
+                                            HeightRequest="100"
+                                            />
+                                        <VerticalStackLayout>
+                                            <Label
+                                                FontSize="16"
+                                                TextColor="Black"
+                                                Text="{Binding Name}"
+                                                />
+                                            <Label
+                                                FontSize="10"
+                                                TextColor="Black"
+                                                Text="{Binding Location}"
+                                                />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
+
+
+                <Button 
+                    BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                    FontSize="Medium"
+                    TextColor="Black"
+                    Text="Mentés" 
+                    Command="{Binding EditCommand}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

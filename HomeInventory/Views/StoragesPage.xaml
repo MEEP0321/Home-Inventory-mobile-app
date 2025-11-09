@@ -5,35 +5,69 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:StoragesViewModel"
-             Loaded="StoragesPage_OnLoaded"
-             Title="StoragesPage">
-    <ScrollView>
-        <VerticalStackLayout>
-                <Grid RowDefinitions="Auto, Auto, *"  WidthRequest="300" RowSpacing="10" Padding="0,10">
-                    <CollectionView ItemsSource="{Binding Storages}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Storage">
-                                <Frame>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer 
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoragesViewModel}}, Path=OpenStorageDetailPageCommand}"
-                                            CommandParameter="{Binding .}" />
-                                    </Frame.GestureRecognizers>
+             Loaded="StoragesPage_OnLoaded">
+    <Grid RowDefinitions="85, *">
+        <Label
+            Grid.Row="0"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
+            BackgroundColor="Black"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            TextColor="#EFECE3"
+            FontSize="Header"
+            Text="Tárolók"
+            />
+        <Button 
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Fill"
+            BackgroundColor="Black"
+            MinimumWidthRequest="100"
+            FontSize="Header"
+            TextColor="#EFECE3"
+            Text="&lt;"
+            Command="{Binding GoBackCommand}"
+            />
+        <Grid Grid.Row="1" RowDefinitions="Auto, *" BackgroundColor="#EFECE3" Padding="20" RowSpacing="20">
+            <Entry 
+                Grid.Row="0"
+                Placeholder="Keresés..."
+                BackgroundColor="#D9D8D2"
+                TextColor="Black"
+                Text="{Binding FilterText}"/>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding FilteredBaseModels}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Item">
+                        <Frame BackgroundColor="#EFECE3" BorderColor="#4A70A9">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoragesViewModel}}, Path=OpenStorageDetailPageCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
 
-                                    <VerticalStackLayout>
-                                        <Label FontSize="Medium" FontAttributes="Bold" Text="{Binding Name}" />
-                                        <Label FontSize="Small" Text="{Binding Location}" />
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                </Grid>
-
-
-
-                <Button Text="Back" Command="{Binding GoBackCommand}"/>
-        </VerticalStackLayout>
-    </ScrollView>
+                            <HorizontalStackLayout Spacing="10">
+                                <Rectangle Fill="Blue"
+                                        WidthRequest="100"
+                                        HeightRequest="100"
+                                        />
+                                <VerticalStackLayout>
+                                    <Label
+                                            FontSize="16"
+                                            TextColor="Black"
+                                            Text="{Binding Name}"
+                                            />
+                                    <Label
+                                            FontSize="10"
+                                            TextColor="Black"
+                                            Text="{Binding Location}"
+                                            />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
 </ContentPage>

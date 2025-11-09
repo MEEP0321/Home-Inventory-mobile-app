@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HomeInventory.Models;
 using HomeInventory.Services;
 using HomeInventory.Views;
@@ -22,12 +23,18 @@ namespace HomeInventory.ViewModels
             var itemList = await service.GetAllStorages();
             Storages.Clear();
             itemList.ForEach(i => Storages.Add(i));
+            FilterText = string.Empty;
         }
 
         public ObservableCollection<Storage> Storages { get; set; }
 
 
+        //Keresésért felel
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FilteredBaseModels))]
+        string filterText = "init";
 
+        public List<Storage> FilteredBaseModels => FilterText.Length == 0 ? Storages.ToList() : Storages.Where(w => w.Name.ToLower().Contains(FilterText.ToLower())).ToList();
 
         //Navigáció
         [RelayCommand]
@@ -37,7 +44,8 @@ namespace HomeInventory.ViewModels
             {
                 var param = new ShellNavigationQueryParameters
                 {
-                    { "storageId", storage.Id}
+                    { "storageId", storage.Id},
+                    { "sourcePage", "View"}
                 };
 
                 await Shell.Current.GoToAsync($"{nameof(StorageDetailsPage)}", param);

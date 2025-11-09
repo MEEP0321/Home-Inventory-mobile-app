@@ -8,29 +8,30 @@
              Loaded="StorageCreatePage_OnLoaded">
     <Grid RowDefinitions="85, *">
         <Label
-           Grid.Row="0"
-           VerticalOptions="Fill"
-           HorizontalOptions="Fill"
-           BackgroundColor="Black"
-           HorizontalTextAlignment="Center"
-           VerticalTextAlignment="Center"
-           TextColor="#EFECE3"
-           FontSize="Header"
-           Text="Tároló hozzáadása"
-           />
+            Grid.Row="0"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
+            BackgroundColor="Black"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            TextColor="#EFECE3"
+            FontSize="Header"
+            Text="Tárolók"
+            />
         <Button 
-           Grid.Row="0"
-           HorizontalOptions="Start"
-           VerticalOptions="Fill"
-           BackgroundColor="Black"
-           MinimumWidthRequest="100"
-           FontSize="Header"
-           Text="&lt;"
-           Command="{Binding GoBackCommand}"
-           />
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Fill"
+            BackgroundColor="Black"
+            MinimumWidthRequest="100"
+            FontSize="Header"
+            TextColor="#EFECE3"
+            Text="&lt;"
+            Command="{Binding GoBackCommand}"         
+            />
         <ScrollView Grid.Row="1" BackgroundColor="#EFECE3">
             <VerticalStackLayout
-           Padding="100"
+           Padding="25"
            Spacing="50"
            >
                 <VerticalStackLayout>
@@ -70,13 +71,56 @@
                 <HorizontalStackLayout>
                     <Label 
                         VerticalOptions="Center"
+                        TextColor="Black"
                         Text="Tárolóban van-e?"/>
-                    <CheckBox IsChecked="{Binding IsStorageSelectionVisible}"/>
+                    <CheckBox BackgroundColor="Black" IsChecked="{Binding IsStorageSelectionVisible}"/>
                 </HorizontalStackLayout>
 
                 <VerticalStackLayout
                     IsVisible="{Binding IsStorageSelectionVisible}"
-                   >
+                    >
+
+                    <VerticalStackLayout 
+                        Spacing="20"
+                        Margin="0, 0, 0, 50"
+                        >
+                        <Label
+                            VerticalOptions="Center"
+                            TextColor="Black"
+                            Text="A kiválasztott tároló"
+                            />
+                        <HorizontalStackLayout
+                            Spacing="10"
+                            IsVisible="{Binding IsSelectedStorageVisible}"
+                            >
+                            <Rectangle Fill="Blue"
+                                WidthRequest="50"
+                                HeightRequest="50"
+                                />
+                            <VerticalStackLayout>
+                                <Label
+                                    FontSize="16"
+                                    TextColor="Black"
+                                    LineBreakMode="WordWrap"
+                                    Text="{Binding SelectedStorage.Name}"
+                                    />
+                                <Label
+                                    FontSize="10"
+                                    TextColor="Black"
+                                    LineBreakMode="WordWrap"
+                                    Text="{Binding SelectedStorage.Location}"
+                                    />
+                            </VerticalStackLayout>
+                            <Button
+                                Command="{Binding RemoveSelectionCommand}"
+                                BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
+                                VerticalOptions="Center"
+                                FontSize="Micro"
+                                TextColor="Black"
+                                Text="x"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
                     <Label 
                        TextColor="Black"
                        Text="Melyik tárolóban van:"/>
@@ -88,30 +132,34 @@
                        Placeholder="Keresés..." />
                     <ScrollView>
                         <CollectionView
-                       MaximumHeightRequest="500"
-                       SelectionMode="Single"
-                       SelectedItem="{Binding SelectedStorage}"
-                       SelectionChangedCommand="{Binding SelectStorageCommand}"
-                       ItemsSource="{Binding FilteredBaseModels}">
+                        MaximumHeightRequest="500"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedStorage}"
+                        SelectionChangedCommand="{Binding SelectStorageCommand}"
+                        ItemsSource="{Binding FilteredBaseModels}">
 
 
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:Storage">
                                     <HorizontalStackLayout>
                                         <Rectangle Fill="Blue"
-                                      WidthRequest="150"
-                                      HeightRequest="150"
-                                       />
-                                        <VerticalStackLayout>
+                                            WidthRequest="100"
+                                            HeightRequest="100"
+                                            />
+                                        <VerticalStackLayout
+                                            Spacing="10">
                                             <Label
-                                           FontSize="Title"
-                                           TextColor="Black"
-                                           Text="{Binding Name}"
-                                           />
+                                                FontSize="16"
+                                                TextColor="Black"
+                                                LineBreakMode="WordWrap"
+                                                Text="{Binding Name}"
+                                                />
                                             <Label
-                                           TextColor="Black"
-                                           Text="{Binding Location}"
-                                           />
+                                                FontSize="10"
+                                                TextColor="Black"
+                                                LineBreakMode="WordWrap"
+                                                Text="{Binding Location}"
+                                                />
                                         </VerticalStackLayout>
                                     </HorizontalStackLayout>
                                 </DataTemplate>

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace HomeInventory.ViewModels
 {
     [QueryProperty(nameof(ItemId), "itemId")]
+    [QueryProperty(nameof(SourcePage), "sourcePage")]
     public partial class ItemDetailsViewModel: BaseViewModel
     {
         public ItemDetailsViewModel(DbService service): base(service)
@@ -21,9 +22,11 @@ namespace HomeInventory.ViewModels
 
         public async Task InitializeAsync()
         {
-            Item = await service.GetItem(itemId);
+            Item = await service.GetItem(ItemId);
         }
 
+        [ObservableProperty]
+        string sourcePage;
 
         [ObservableProperty]
         int itemId;
@@ -34,8 +37,8 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task Delete()
         {
-            await service.DeleteItem(itemId);
-            await Shell.Current.GoToAsync($"..", true);
+            await service.DeleteItem(ItemId);
+            GoBack();
         }
 
         //Navigáció
@@ -43,11 +46,11 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task OpenItemEditPage()
         {
-            if (item is not null)
+            if (Item is not null)
             {
                 var param = new ShellNavigationQueryParameters
                 {
-                    { "itemId", item.Id}
+                    { "itemId", Item.Id}
                 };
 
                 await Shell.Current.GoToAsync($"{nameof(ItemEditPage)}", param);
@@ -57,7 +60,16 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task GoBack()
         {
-            await Shell.Current.GoToAsync($"{nameof(ItemsPage)}", true);
+            if (SourcePage == "View")
+            {
+                await Shell.Current.GoToAsync($"{nameof(ItemsPage)}", true);
+            }
+
+            if (SourcePage == "StorageDetail")
+            {
+                await Shell.Current.GoToAsync($"..", true);
+            }
         }
+  
     }
 }

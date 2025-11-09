@@ -5,16 +5,111 @@
              xmlns:model="clr-namespace:HomeInventory.Models"
              xmlns:viewmodel="clr-namespace:HomeInventory.ViewModels"
              x:DataType="viewmodel:ItemDetailsViewModel"
-             Loaded="ItemDetailsPage_OnLoaded"
-             Title="ItemDetailsPage">
-    <VerticalStackLayout>
-        <Label Text="details page"/>
-        <Label Text="{Binding Item.Name}"/>
-        <Label Text="{Binding Item.Notes}"/>
-        <Label Text="{Binding Item.Storage.Name}"/>
+             Loaded="ItemDetailsPage_OnLoaded">
+    <Grid RowDefinitions="85, auto, *">
+        <Label
+            Grid.Row="0"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill"
+            BackgroundColor="Black"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            TextColor="#EFECE3"
+            FontSize="Header"
+            Text="Tárgy"     
+            />
+        <Button 
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Fill"
+            BackgroundColor="Black"
+            MinimumWidthRequest="100"
+            FontSize="Header"
+            TextColor="#EFECE3"
+            Text="&lt;"
+            Command="{Binding GoBackCommand}"
+            />
+        <Grid
+            Grid.Row="1"
+            RowDefinitions="auto"
+            ColumnDefinitions="*, *"
+            BackgroundColor="#EFECE3"
+            Padding="20"
+            >
+            <Button Grid.Column="0" 
+                    HorizontalOptions="Center" VerticalOptions="Center" 
+                    WidthRequest="150"
+                    BackgroundColor="#B5BDC6" BorderColor="Gray" BorderWidth="2"
+                    Text="Szerkeztés" Command="{Binding OpenItemEditPageCommand}"/>
+            <Button Grid.Column="1" 
+                    HorizontalOptions="Center" VerticalOptions="Center" 
+                    WidthRequest="150"
+                    BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
+                    Text="Törlés" Command="{Binding DeleteCommand}"/>
+        </Grid>
+        <ScrollView Grid.Row="2" BackgroundColor="#EFECE3">
+            <VerticalStackLayout
+                Padding="25"
+                Spacing="30"
+                >
+                <VerticalStackLayout>
+                    <Rectangle Fill="Blue"
+                        WidthRequest="350"
+                        HeightRequest="350"
+                        />
+                </VerticalStackLayout>
 
-        <Button Text="edit" Command="{Binding OpenItemEditPageCommand}"/>
-        <Button Text="delete" Command="{Binding DeleteCommand}"/>
-        <Button Text="back" Command="{Binding GoBackCommand}"/>
-    </VerticalStackLayout>
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Név:"/>
+                        <Label TextColor="Black" Text="{Binding Item.Name}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Tárolója:"/>
+                        <Label TextColor="Black" Text="{Binding Item.Storage.Name}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Lokáció:"/>
+                        <Label LineBreakMode="WordWrap" TextColor="Black" Text="{Binding Item.Location}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    StrokeThickness="0"
+                    Background="LightGray"
+                    StrokeShape="RoundRectangle 5"
+                    Padding="5"
+                    Margin="0,5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label TextColor="Black" FontAttributes="Bold" Text="Megjegyzés:"/>
+                        <Label LineBreakMode="WordWrap" TextColor="Black" Text="{Binding Item.Notes}"/>
+                    </VerticalStackLayout>
+                </Border>
+                
+                
+                
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
