@@ -16,7 +16,7 @@
             VerticalTextAlignment="Center"
             TextColor="#EFECE3"
             FontSize="Header"
-            Text="Tárolók"
+            Text="Tároló létrehozása"
             />
         <Button 
             Grid.Row="0"
@@ -31,14 +31,25 @@
             />
         <ScrollView Grid.Row="1" BackgroundColor="#EFECE3">
             <VerticalStackLayout
-           Padding="25"
-           Spacing="50"
-           >
-                <VerticalStackLayout>
-                    <Rectangle Fill="Blue"
-                       WidthRequest="350"
-                       HeightRequest="350"
-                       />
+                Padding="25"
+                Spacing="50"
+                >
+                <VerticalStackLayout
+                    Spacing="10"
+                    >
+                    <Image
+                        Source="{Binding Storage.ImgPath}"
+                        Aspect="AspectFill"
+                        WidthRequest="300"
+                        HeightRequest="300"
+                        />
+                    <Button 
+                        BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                        FontSize="Small"
+                        TextColor="Black"
+                        Text="Fotó készítése" 
+                        Command="{Binding TakePhotoCommand}"
+                        />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout
@@ -93,7 +104,9 @@
                             Spacing="10"
                             IsVisible="{Binding IsSelectedStorageVisible}"
                             >
-                            <Rectangle Fill="Blue"
+                            <Image
+                                Source="{Binding SelectedStorage.ImgPath}"
+                                Aspect="AspectFill"
                                 WidthRequest="50"
                                 HeightRequest="50"
                                 />
@@ -137,12 +150,12 @@
                         SelectedItem="{Binding SelectedStorage}"
                         SelectionChangedCommand="{Binding SelectStorageCommand}"
                         ItemsSource="{Binding FilteredBaseModels}">
-
-
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:Storage">
                                     <HorizontalStackLayout>
-                                        <Rectangle Fill="Blue"
+                                        <Image
+                                            Source="{Binding ImgPath}"
+                                            Aspect="AspectFill"
                                             WidthRequest="100"
                                             HeightRequest="100"
                                             />

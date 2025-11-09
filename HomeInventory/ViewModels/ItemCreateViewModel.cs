@@ -11,13 +11,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using HomeInventory.Messages;
 
 namespace HomeInventory.ViewModels
 {
     public partial class ItemCreateViewModel: BaseViewModel
     {
-        public ItemCreateViewModel(DbService service): base(service)
+        private MediaService mediaService;
+        public ItemCreateViewModel(DbService service, MediaService mediaService): base(service)
         {
+            this.mediaService = mediaService;
             item = new Item();
             item.Type = "Tárgy";
             selectedStorage = new Storage();
@@ -32,6 +36,8 @@ namespace HomeInventory.ViewModels
             storageList.ForEach(s => Storages.Add(s));
             FilterText = string.Empty;
             IsSelectedStorageVisible = false;
+
+            Item.ImgPath = Path.Combine(FileSystem.AppDataDirectory, "Defaults", "ItemDefaultPic.png");
         }
 
         //Keresésért felel
@@ -66,7 +72,7 @@ namespace HomeInventory.ViewModels
         {
             FilterText = string.Empty;
             IsSelectedStorageVisible = false;
-            item.ParenId = -1;
+            Item.ParenId = -1;
         }
 
 
@@ -76,15 +82,36 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task CreateItem()
         {
-            var result = await service.CreateItem(item);
-
-            if (result is not null)
+            if (Item.Name is not null && Item.Name.Replace(" ", "").Length != 0)
             {
-                GoBack();
+                var result = await service.CreateItem(Item);
+
+                if (result is not null)
+                {
+                    await GoBack();
+                }
+                else
+                {
+                    WeakReferenceMessenger.Default.Send(new AlertMessage(service.StatusMessage));
+                }
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
+                WeakReferenceMessenger.Default.Send(new AlertMessage("A név mezőt kötelező kitölteni!"));
+            }
+        }
+
+        [RelayCommand]
+        public async Task TakePhoto()
+        {
+            var photo = await MediaPicker.CapturePhotoAsync();
+            if (photo is not null)
+            {
+                var imgPath = await mediaService.SavePhotoAsync(photo);
+                if (imgPath is not null)
+                {
+                    Item.ImgPath = imgPath;
+                }
             }
         }
 

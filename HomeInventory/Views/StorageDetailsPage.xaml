@@ -53,9 +53,11 @@
                 Spacing="30"
                 >
                 <VerticalStackLayout>
-                    <Rectangle Fill="Blue"
-                        WidthRequest="350"
-                        HeightRequest="350"
+                    <Image
+                        Source="{Binding Storage.ImgPath}"
+                        Aspect="AspectFill"
+                        WidthRequest="300"
+                        HeightRequest="300"
                         />
                 </VerticalStackLayout>
                 <Border
@@ -124,7 +126,9 @@
                                         </Frame.GestureRecognizers>
 
                                         <HorizontalStackLayout Spacing="10">
-                                            <Rectangle Fill="Blue"
+                                            <Image
+                                                Source="{Binding ImgPath}"
+                                                Aspect="AspectFill"
                                                 WidthRequest="100"
                                                 HeightRequest="100"
                                                 />

@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using HomeInventory.Messages;
 using HomeInventory.Models;
 using HomeInventory.Services;
 using HomeInventory.Views;
@@ -37,8 +39,17 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task Delete()
         {
-            await service.DeleteItem(ItemId);
-            GoBack();
+            var confirm = new ConfirmMessage("Törlés", "Biztosan törölni szeretnéd ezt a tárgyat?");
+            WeakReferenceMessenger.Default.Send(confirm);
+
+            bool confirmed = await confirm.Tcs.Task;
+            
+            if (confirmed)
+            {
+                await service.DeleteItem(ItemId);
+                GoBack();
+            }
+            
         }
 
         //Navigáció

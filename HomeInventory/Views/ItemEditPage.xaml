@@ -35,10 +35,19 @@
                 Spacing="50"
                 >
                 <VerticalStackLayout>
-                    <Rectangle Fill="Blue"
-                      WidthRequest="350"
-                      HeightRequest="350"
-                      />
+                    <Image
+                        Source="{Binding EditItem.ImgPath}"
+                        Aspect="AspectFill"
+                        WidthRequest="300"
+                        HeightRequest="300"
+                        />
+                    <Button 
+                        BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                        FontSize="Small"
+                        TextColor="Black"
+                        Text="Fotó készítése" 
+                        Command="{Binding TakePhotoCommand}"
+                        />
                 </VerticalStackLayout>
 
                 <VerticalStackLayout>
@@ -78,8 +87,11 @@
                 <VerticalStackLayout 
                     IsVisible="{Binding IsStorageSelectionVisible}"
                     Spacing="20">
-                    
-                    <VerticalStackLayout>
+
+                    <VerticalStackLayout 
+                        Spacing="20"
+                        Margin="0, 0, 0, 50"
+                        >
                         <Label
                             VerticalOptions="Center"
                             TextColor="Black"
@@ -87,16 +99,31 @@
                             />
                         <HorizontalStackLayout
                             Spacing="10"
+                            IsVisible="{Binding IsSelectedStorageVisible}"
                             >
-                            <Label
-                                VerticalOptions="Center"
-                                TextColor="Black"
-                                Text="{Binding SelectedStorageText}"
+                            <Image
+                                Source="{Binding SelectedStorage.ImgPath}"
+                                Aspect="AspectFill"
+                                WidthRequest="50"
+                                HeightRequest="50"
                                 />
+                            <VerticalStackLayout>
+                                <Label
+                                    FontSize="16"
+                                    TextColor="Black"
+                                    LineBreakMode="WordWrap"
+                                    Text="{Binding SelectedStorage.Name}"
+                                    />
+                                <Label
+                                    FontSize="10"
+                                    TextColor="Black"
+                                    LineBreakMode="WordWrap"
+                                    Text="{Binding SelectedStorage.Location}"
+                                    />
+                            </VerticalStackLayout>
                             <Button
-                                IsVisible="{Binding IsDeleteButtonVisible}"
                                 Command="{Binding RemoveSelectionCommand}"
-                                BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="1"
+                                BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
                                 VerticalOptions="Center"
                                 FontSize="Micro"
                                 TextColor="Black"
@@ -123,7 +150,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="model:Storage">
                                     <HorizontalStackLayout>
-                                        <Rectangle Fill="Blue"
+                                        <Image
+                                            Source="{Binding ImgPath}"
+                                            Aspect="AspectFill"
                                             WidthRequest="100"
                                             HeightRequest="100"
                                             />

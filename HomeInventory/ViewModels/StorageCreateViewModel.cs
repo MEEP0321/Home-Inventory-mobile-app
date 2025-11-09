@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using HomeInventory.Messages;
 using HomeInventory.Models;
 using HomeInventory.Services;
 using System;
@@ -13,8 +15,10 @@ namespace HomeInventory.ViewModels
 {
     public partial class StorageCreateViewModel : BaseViewModel
     {
+        private MediaService mediaService;
         public StorageCreateViewModel(DbService service) : base(service) 
         {
+            this.mediaService = mediaService;
             storage = new Storage();
             storage.Type = "Tároló";
             Storages = new ObservableCollection<Storage>();
@@ -28,6 +32,8 @@ namespace HomeInventory.ViewModels
             FilterText = string.Empty;
             IsStorageSelectionVisible = false;
             IsSelectedStorageVisible = false;
+
+            Storage.ImgPath = Path.Combine(FileSystem.AppDataDirectory, "Defaults", "StorageDefaultPic.png");
         }
 
         [ObservableProperty]
@@ -66,18 +72,24 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public async Task CreateStorage()
         {
-            var result = await service.CreateStorage(storage);
-
-            if (result is not null)
+            if (Storage.Name is not null && Storage.Name.Replace(" ", "").Length != 0)
             {
-                GoBack();
+                var result = await service.CreateStorage(storage);
+
+                if (result is not null)
+                {
+                    GoBack();
+                }
+                else
+                {
+                    WeakReferenceMessenger.Default.Send(new AlertMessage(service.StatusMessage));
+                }
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
+                WeakReferenceMessenger.Default.Send(new AlertMessage("A név mezőt kötelező kitölteni!"));
             }
         }
-
 
         [RelayCommand]
         public void RemoveSelection()
@@ -92,6 +104,20 @@ namespace HomeInventory.ViewModels
             if (!IsStorageSelectionVisible)
             {
                 RemoveSelection();
+            }
+        }
+
+        [RelayCommand]
+        public async Task TakePhoto()
+        {
+            var photo = await MediaPicker.CapturePhotoAsync();
+            if (photo is not null)
+            {
+                var imgPath = await mediaService.SavePhotoAsync(photo);
+                if (imgPath is not null)
+                {
+                    Storage.ImgPath = imgPath;
+                }
             }
         }
 

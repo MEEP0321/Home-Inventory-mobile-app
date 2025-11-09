@@ -15,7 +15,7 @@
             HorizontalTextAlignment="Center"
             VerticalTextAlignment="Center"
             TextColor="#EFECE3"
-            FontSize="Header"
+            FontSize="Medium"
             Text="Tárgy hozzáadása"
             />
         <Button 
@@ -23,7 +23,7 @@
             HorizontalOptions="Start"
             VerticalOptions="Fill"
             BackgroundColor="Black"
-            MinimumWidthRequest="100"
+            MinimumWidthRequest="75"
             FontSize="Header"
             TextColor="#EFECE3"
             Text="&lt;"
@@ -34,10 +34,19 @@
             Padding="25"
             Spacing="50"
             >
-                <VerticalStackLayout>
-                    <Rectangle Fill="Blue"
-                        WidthRequest="350"
-                        HeightRequest="350"
+                <VerticalStackLayout Spacing="10">
+                    <Image
+                        Source="{Binding Item.ImgPath}"
+                        Aspect="AspectFill"
+                        WidthRequest="300"
+                        HeightRequest="300"
+                        />
+                    <Button 
+                        BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
+                        FontSize="Small"
+                        TextColor="Black"
+                        Text="Fotó készítése" 
+                        Command="{Binding TakePhotoCommand}"
                         />
                 </VerticalStackLayout>
                     
@@ -67,7 +76,9 @@
                         Spacing="10"
                         IsVisible="{Binding IsSelectedStorageVisible}"
                         >
-                        <Rectangle Fill="Blue"
+                        <Image
+                            Source="{Binding Item.ImgPath}"
+                            Aspect="AspectFill"
                             WidthRequest="50"
                             HeightRequest="50"
                             />
@@ -114,9 +125,11 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="model:Storage">
                                 <HorizontalStackLayout>
-                                    <Rectangle Fill="Blue"
-                                            WidthRequest="100"
-                                            HeightRequest="100"
+                                    <Image
+                                        Source="{Binding ImgPath}"
+                                        Aspect="AspectFill"
+                                        WidthRequest="100"
+                                        HeightRequest="100"
                                         />
                                     <VerticalStackLayout>
                                         <Label

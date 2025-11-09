@@ -47,10 +47,12 @@
                             </Frame.GestureRecognizers>
 
                             <HorizontalStackLayout Spacing="10">
-                                <Rectangle Fill="Blue"
-                                        WidthRequest="100"
-                                        HeightRequest="100"
-                                        />
+                                <Image
+                                    Source="{Binding ImgPath}"
+                                    Aspect="AspectFill"
+                                    WidthRequest="100"
+                                    HeightRequest="100"
+                                    />
                                 <VerticalStackLayout>
                                     <Label
                                             FontSize="16"

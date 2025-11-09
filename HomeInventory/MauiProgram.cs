@@ -44,6 +44,7 @@ namespace HomeInventory
 
             builder.Services.AddSingleton<DbContext>();
             builder.Services.AddSingleton<DbService>();
+            builder.Services.AddSingleton<MediaService>();
 
 
 #if DEBUG

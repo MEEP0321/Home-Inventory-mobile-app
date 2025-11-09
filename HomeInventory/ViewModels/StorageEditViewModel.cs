@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using HomeInventory.Messages;
 using HomeInventory.Models;
 using HomeInventory.Services;
 using HomeInventory.Views;
@@ -15,8 +17,10 @@ namespace HomeInventory.ViewModels
     [QueryProperty(nameof(StorageId), "storageId")]
     public partial class StorageEditViewModel : BaseViewModel
     {
+        private MediaService mediaService;
         public StorageEditViewModel(DbService service) : base(service)
         {
+            this.mediaService = mediaService;
             Storages = new ObservableCollection<Storage>();
             selectedStorage = new Storage();
         }
@@ -26,21 +30,16 @@ namespace HomeInventory.ViewModels
             var storageList = await service.GetAllStorages();
             Storages.Clear();
             storageList.ForEach(s => Storages.Add(s));
-
-            EditStorage = await service.GetStorage(storageId);
-
+            FilterText = string.Empty;
             IsStorageSelectionVisible = false;
+        
+            EditStorage = await service.GetStorage(storageId);
 
             if (EditStorage.ParenId != -1)
             {
-                SelectedStorageText = EditStorage.ParentStorage.Name;
+                SelectedStorage = EditStorage.ParentStorage;
+                SelectedStorage.Location = await service.GetLocation(SelectedStorage);
             }
-            else
-            {
-                SelectedStorageText = "-";
-            }
-            IsDeleteButtonVisible = false;
-            FilterText = string.Empty;
         }
 
         [ObservableProperty]
@@ -71,21 +70,25 @@ namespace HomeInventory.ViewModels
         Storage selectedStorage;
 
         [ObservableProperty]
-        string selectedStorageText = "init";
-
-        [ObservableProperty]
-        bool isDeleteButtonVisible;
+        bool isSelectedStorageVisible;
 
 
         [RelayCommand]
         public async Task Edit()
         {
-            var result = await service.UpdateStorage(editStorage);
-            if (result is null)
+            if (EditStorage.Name is not null && EditStorage.Name.Replace(" ", "").Length != 0)
             {
-                await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
+                var result = await service.UpdateStorage(EditStorage);
+                if (result is null)
+                {
+                    await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
+                }
+                await Shell.Current.GoToAsync($"{nameof(StoragesPage)}", true);
             }
-            await Shell.Current.GoToAsync($"{nameof(StoragesPage)}", true);
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new AlertMessage("A név mezőt kötelező kitölteni!"));
+            }
         }
 
         [RelayCommand]
@@ -93,7 +96,7 @@ namespace HomeInventory.ViewModels
         {
             if (EditStorage.ParenId != -1)
             {
-                IsDeleteButtonVisible = true;
+                IsSelectedStorageVisible = true;
             }
             IsStorageSelectionVisible = true;
         }
@@ -101,8 +104,8 @@ namespace HomeInventory.ViewModels
         [RelayCommand]
         public void RemoveSelection()
         {
-            IsDeleteButtonVisible = false;
-            SelectedStorageText = $"-";
+            FilterText = string.Empty;
+            IsSelectedStorageVisible = false;
             EditStorage.ParenId = -1;
             EditStorage.Location = string.Empty;
         }
@@ -113,9 +116,22 @@ namespace HomeInventory.ViewModels
             if (SelectedStorage is not null)
             {
                 FilterText = SelectedStorage.Name;
-                IsDeleteButtonVisible = true;
-                SelectedStorageText = $"{SelectedStorage.Name}";
+                IsSelectedStorageVisible = true;
                 EditStorage.ParenId = SelectedStorage.Id;
+            }
+        }
+
+        [RelayCommand]
+        public async Task TakePhoto()
+        {
+            var photo = await MediaPicker.CapturePhotoAsync();
+            if (photo is not null)
+            {
+                var imgPath = await mediaService.SavePhotoAsync(photo);
+                if (imgPath is not null)
+                {
+                    EditStorage.ImgPath = imgPath;
+                }
             }
         }
 

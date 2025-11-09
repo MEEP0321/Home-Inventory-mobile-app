@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using HomeInventory.Messages;
 using HomeInventory.Models;
 using HomeInventory.Services;
 using HomeInventory.Views;
@@ -33,12 +35,20 @@ namespace HomeInventory.ViewModels
         [ObservableProperty]
         Storage storage;
 
-
         [RelayCommand]
         public async Task Delete()
         {
-            await service.DeleteStorage(StorageId);
-            GoBack();
+            var confirm = new ConfirmMessage("Törlés", "Biztosan törölni szeretnéd ezt a tárolót?");
+            WeakReferenceMessenger.Default.Send(confirm);
+
+            bool confirmed = await confirm.Tcs.Task;
+
+            if (confirmed)
+            {
+                await service.DeleteStorage(StorageId);
+                GoBack();
+            }
+
         }
 
         [RelayCommand]

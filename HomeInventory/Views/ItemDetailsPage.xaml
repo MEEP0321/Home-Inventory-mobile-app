@@ -53,9 +53,11 @@
                 Spacing="30"
                 >
                 <VerticalStackLayout>
-                    <Rectangle Fill="Blue"
-                        WidthRequest="350"
-                        HeightRequest="350"
+                    <Image
+                        Source="{Binding Item.ImgPath}"
+                        Aspect="AspectFill"
+                        WidthRequest="300"
+                        HeightRequest="300"
                         />
                 </VerticalStackLayout>
 
