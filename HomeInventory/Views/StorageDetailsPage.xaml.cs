@@ -12,7 +12,11 @@ public partial class StorageDetailsPage : ContentPage
 		InitializeComponent();
         BindingContext = vm;
         this.vm = vm;
+    }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         WeakReferenceMessenger.Default.Register<ConfirmMessage>(this, OnConfirmMessageReceived);
     }
     private async void StorageDetailsPage_OnLoaded(object? sender, EventArgs e)

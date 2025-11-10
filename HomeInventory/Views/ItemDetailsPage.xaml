@@ -40,11 +40,13 @@
                     HorizontalOptions="Center" VerticalOptions="Center" 
                     WidthRequest="150"
                     BackgroundColor="#B5BDC6" BorderColor="Gray" BorderWidth="2"
-                    Text="Szerkeztés" Command="{Binding OpenItemEditPageCommand}"/>
+                    TextColor="Black"
+                    Text="Szerkesztés" Command="{Binding OpenItemEditPageCommand}"/>
             <Button Grid.Column="1" 
                     HorizontalOptions="Center" VerticalOptions="Center" 
                     WidthRequest="150"
                     BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
+                    TextColor="Black"
                     Text="Törlés" Command="{Binding DeleteCommand}"/>
         </Grid>
         <ScrollView Grid.Row="2" BackgroundColor="#EFECE3">

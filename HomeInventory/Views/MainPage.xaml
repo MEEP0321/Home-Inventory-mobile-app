@@ -9,7 +9,7 @@
         <Label
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            FontSize="Header"
+            FontSize="Large"
             BackgroundColor="Black"
             TextColor="#EFECE3"
             Text="Home"

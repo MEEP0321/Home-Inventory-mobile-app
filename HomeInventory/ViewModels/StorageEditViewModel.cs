@@ -83,7 +83,7 @@ namespace HomeInventory.ViewModels
                 {
                     await Shell.Current.DisplayAlert("Error", service.StatusMessage, "OK");
                 }
-                await Shell.Current.GoToAsync($"{nameof(StoragesPage)}", true);
+                await Shell.Current.GoToAsync($"..", true);
             }
             else
             {

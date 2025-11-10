@@ -37,15 +37,17 @@
             Padding="20"
             >
             <Button Grid.Column="0" 
-                 HorizontalOptions="Center" VerticalOptions="Center" 
-                 WidthRequest="150"
-                 BackgroundColor="#B5BDC6" BorderColor="Gray" BorderWidth="2"
-                 Text="Szerkeztés" Command="{Binding OpenStorageEditPageCommand}"/>
+                HorizontalOptions="Center" VerticalOptions="Center" 
+                WidthRequest="150"
+                BackgroundColor="#B5BDC6" BorderColor="Gray" BorderWidth="2"
+                TextColor="Black"
+                Text="Szerkesztés" Command="{Binding OpenStorageEditPageCommand}"/>
             <Button Grid.Column="1" 
-                 HorizontalOptions="Center" VerticalOptions="Center" 
-                 WidthRequest="150"
-                 BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
-                 Text="Törlés" Command="{Binding DeleteCommand}"/>
+                HorizontalOptions="Center" VerticalOptions="Center" 
+                WidthRequest="150"
+                BackgroundColor="#F7374F" BorderColor="#88304E" BorderWidth="2"
+                TextColor="Black"
+                Text="Törlés" Command="{Binding DeleteCommand}"/>
         </Grid>
         <ScrollView Grid.Row="2" BackgroundColor="#EFECE3">
             <VerticalStackLayout

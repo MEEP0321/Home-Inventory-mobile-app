@@ -42,6 +42,7 @@
                         Aspect="AspectFill"
                         WidthRequest="300"
                         HeightRequest="300"
+                        Margin="10"
                         />
                     <Button 
                         BackgroundColor="#8FABD4" BorderColor="#4A70A9" BorderWidth="3"
@@ -158,6 +159,7 @@
                                             Aspect="AspectFill"
                                             WidthRequest="100"
                                             HeightRequest="100"
+                                            Margin="10"
                                             />
                                         <VerticalStackLayout
                                             Spacing="10">
