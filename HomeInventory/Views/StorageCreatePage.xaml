@@ -85,7 +85,7 @@
                         VerticalOptions="Center"
                         TextColor="Black"
                         Text="Tárolóban van-e?"/>
-                    <CheckBox BackgroundColor="Black" IsChecked="{Binding IsStorageSelectionVisible}"/>
+                    <CheckBox Color="Black" IsChecked="{Binding IsStorageSelectionVisible}"/>
                 </HorizontalStackLayout>
 
                 <VerticalStackLayout
